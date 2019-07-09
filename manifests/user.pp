@@ -1,5 +1,5 @@
 # Define - mcollective::user
-define mcollective::user(
+define mcollective_legacy::user(
   $username    = $name,
   $callerid    = $name,
   $group       = $name,
@@ -30,16 +30,16 @@ define mcollective::user(
   $ssl_ciphers       = undef,
 ) {
 
-  include ::mcollective
+  include ::mcollective_legacy
 
-  $_middleware_ssl    = pick_default($middleware_ssl, $::mcollective::middleware_ssl)
-  $_ssl_ca_cert       = pick_default($ssl_ca_cert, $::mcollective::ssl_ca_cert)
-  $_ssl_server_public = pick_default($ssl_server_public, $::mcollective::ssl_server_public)
-  $_ssl_server_private= pick_default($ssl_server_private, $::mcollective::ssl_server_private)
-  $_middleware_hosts  = pick_default($middleware_hosts, $::mcollective::middleware_hosts)
-  $_securityprovider  = pick_default($securityprovider, $::mcollective::securityprovider)
-  $_connector         = pick_default($connector, $::mcollective::connector)
-  $_ssl_ciphers       = pick_default($ssl_ciphers, $::mcollective::ssl_ciphers)
+  $_middleware_ssl    = pick_default($middleware_ssl, $::mcollective_legacy::middleware_ssl)
+  $_ssl_ca_cert       = pick_default($ssl_ca_cert, $::mcollective_legacy::ssl_ca_cert)
+  $_ssl_server_public = pick_default($ssl_server_public, $::mcollective_legacy::ssl_server_public)
+  $_ssl_server_private= pick_default($ssl_server_private, $::mcollective_legacy::ssl_server_private)
+  $_middleware_hosts  = pick_default($middleware_hosts, $::mcollective_legacy::middleware_hosts)
+  $_securityprovider  = pick_default($securityprovider, $::mcollective_legacy::securityprovider)
+  $_connector         = pick_default($connector, $::mcollective_legacy::connector)
+  $_ssl_ciphers       = pick_default($ssl_ciphers, $::mcollective_legacy::ssl_ciphers)
 
   # Validate that both forms of data weren't given
   if $certificate and $certificate_content {
@@ -66,13 +66,13 @@ define mcollective::user(
     group  => $group,
   }
 
-  datacat { "mcollective::user ${username}":
+  datacat { "mcollective_legacy::user ${username}":
     path     => "${homedir_real}/.mcollective",
-    collects => [ 'mcollective::user', 'mcollective::client' ],
+    collects => [ 'mcollective_legacy::user', 'mcollective_legacy::client' ],
     owner    => $username,
     group    => $group,
     mode     => '0400',
-    template => 'mcollective/settings.cfg.erb',
+    template => 'mcollective_legacy/settings.cfg.erb',
   }
 
   if $_middleware_ssl or $_securityprovider == 'ssl' {
@@ -164,21 +164,21 @@ define mcollective::user(
       }
     }
 
-    mcollective::user::setting { "${username}:plugin.ssl_client_public":
+    mcollective_legacy::user::setting { "${username}:plugin.ssl_client_public":
       setting  => 'plugin.ssl_client_public',
       username => $username,
       value    => "${homedir_real}/.mcollective.d/credentials/certs/${callerid}.pem",
       order    => '60',
     }
 
-    mcollective::user::setting { "${username}:plugin.ssl_client_private":
+    mcollective_legacy::user::setting { "${username}:plugin.ssl_client_private":
       setting  => 'plugin.ssl_client_private',
       username => $username,
       value    => "${homedir_real}/.mcollective.d/credentials/private_keys/${callerid}.pem",
       order    => '60',
     }
 
-    mcollective::user::setting { "${username}:plugin.ssl_server_public":
+    mcollective_legacy::user::setting { "${username}:plugin.ssl_server_public":
       setting  => 'plugin.ssl_server_public',
       username => $username,
       value    => "${homedir_real}/.mcollective.d/credentials/certs/server_public.pem",
@@ -215,13 +215,13 @@ define mcollective::user(
       }
     }
 
-    mcollective::user::setting { "${username}:plugin.sshkey.client.learn_public_keys":
+    mcollective_legacy::user::setting { "${username}:plugin.sshkey.client.learn_public_keys":
       setting  => 'plugin.sshkey.client.learn_public_keys',
       username => $username,
       value    => bool2num($sshkey_learn_public_keys),
     }
 
-    mcollective::user::setting { "${username}:plugin.sshkey.client.overwrite_stored_keys":
+    mcollective_legacy::user::setting { "${username}:plugin.sshkey.client.overwrite_stored_keys":
       setting  => 'plugin.sshkey.client.overwrite_stored_keys',
       username => $username,
       value    => bool2num($sshkey_overwrite_stored_keys),
@@ -229,14 +229,14 @@ define mcollective::user(
 
     # Learning public keys implies you want to ignore known_hosts
     if $sshkey_learn_public_keys {
-      mcollective::user::setting { "${username}:plugin.sshkey.client.publickey_dir":
+      mcollective_legacy::user::setting { "${username}:plugin.sshkey.client.publickey_dir":
         setting  => 'plugin.sshkey.client.publickey_dir',
         username => $username,
         value    => $sshkey_publickey_dir_real,
       }
     }
     else {
-      mcollective::user::setting { "${username}:plugin.sshkey.client.known_hosts":
+      mcollective_legacy::user::setting { "${username}:plugin.sshkey.client.known_hosts":
         setting  => 'plugin.sshkey.client.known_hosts',
         username => $username,
         value    => $sshkey_known_hosts_real,
@@ -244,7 +244,7 @@ define mcollective::user(
     }
 
     if $sshkey_enable_private_key {
-      mcollective::user::setting { "${username}:plugin.sshkey.client.private_key":
+      mcollective_legacy::user::setting { "${username}:plugin.sshkey.client.private_key":
         setting  => 'plugin.sshkey.client.private_key',
         username => $username,
         value    => $private_path,
@@ -252,7 +252,7 @@ define mcollective::user(
     }
 
     if $sshkey_enable_send_key {
-      mcollective::user::setting { "${username}:plugin.sshkey.client.send_key":
+      mcollective_legacy::user::setting { "${username}:plugin.sshkey.client.send_key":
         setting  => 'plugin.sshkey.client.send_key',
         username => $username,
         value    => $public_path,
@@ -265,7 +265,7 @@ define mcollective::user(
     $pool_size = size(flatten([$_middleware_hosts]))
     $hosts = range( '1', $pool_size )
     $connectors = prefix( $hosts, "${username}_" )
-    mcollective::user::connector { $connectors:
+    mcollective_legacy::user::connector { $connectors:
       username       => $username,
       callerid       => $callerid,
       homedir        => $homedir_real,

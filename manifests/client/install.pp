@@ -1,14 +1,14 @@
 # private class
-class mcollective::client::install {
+class mcollective_legacy::client::install {
   if $caller_module_name != $module_name {
     fail("Use of private class ${name} by ${caller_module_name}")
   }
 
-  if $mcollective::manage_packages {
+  if $mcollective_legacy::manage_packages {
     # prevent conflict where client package name == server package name
-    if $mcollective::client_package != $mcollective::server_package {
-      package { $mcollective::client_package:
-        ensure => $mcollective::version,
+    if $mcollective_legacy::client_package != $mcollective_legacy::server_package {
+      package { $mcollective_legacy::client_package:
+        ensure => $mcollective_legacy::version,
       }
     }
   }

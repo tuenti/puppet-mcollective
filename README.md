@@ -1,3 +1,5 @@
+# NOTE, all mcollective classes have been renamed to mcollective_legacy to co-live with choria mcollective classes
+
 # MCollective module for Puppet
 
 [![Build Status](https://travis-ci.org/voxpupuli/puppet-mcollective.png?branch=master)](https://travis-ci.org/voxpupuli/puppet-mcollective)

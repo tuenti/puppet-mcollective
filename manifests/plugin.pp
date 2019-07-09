@@ -1,5 +1,5 @@
 #
-define mcollective::plugin (
+define mcollective_legacy::plugin (
   $source         = undef,
   $package        = false,
   $type           = 'agent',
@@ -10,10 +10,10 @@ define mcollective::plugin (
   $server         = undef,
   $package_ensure = 'present',
 ) {
-  include ::mcollective
+  include ::mcollective_legacy
 
-  $_client = pick_default($client, $::mcollective::client)
-  $_server = pick_default($server, $::mcollective::server)
+  $_client = pick_default($client, $::mcollective_legacy::client)
+  $_server = pick_default($server, $::mcollective_legacy::server)
 
   if $package {
     # install from a package named "mcollective-${name}-${type}"
@@ -24,7 +24,7 @@ define mcollective::plugin (
 
     if $_server {
       # set up a notification if we know we're managing a server
-      Package[$package_name] ~> Class['mcollective::server::service']
+      Package[$package_name] ~> Class['mcollective_legacy::server::service']
     }
 
     # install the client package if we're installing on a $mcollective::client
@@ -39,11 +39,11 @@ define mcollective::plugin (
     if $source {
       $source_real = $source
     } else {
-      $source_real = "puppet:///modules/mcollective/plugins/${name}"
+      $source_real = "puppet:///modules/mcollective_legacy/plugins/${name}"
     }
 
-    datacat_fragment { "mcollective::plugin ${name}":
-      target => 'mcollective::site_libdir',
+    datacat_fragment { "mcollective_legacy::plugin ${name}":
+      target => 'mcollective_legacy::site_libdir',
       data   => {
         source_path => [ $source_real ],
       },

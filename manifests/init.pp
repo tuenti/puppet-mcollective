@@ -1,5 +1,5 @@
 # Class - mcollective
-class mcollective (
+class mcollective_legacy (
   # which subcomponents to install here
   $server = true,
   $client = false,
@@ -11,7 +11,7 @@ class mcollective (
   $sshkeyauth_gem_version = 'present',
 
   # core configuration
-  $confdir          = $mcollective::defaults::confdir,
+  $confdir          = $mcollective_legacy::defaults::confdir,
   $main_collective  = 'mcollective',
   $collectives      = 'mcollective',
   $connector        = 'activemq',
@@ -26,8 +26,8 @@ class mcollective (
   $rpcauditprovider = 'logfile',
   $rpcauditlogfile  = '/var/log/mcollective-audit.log',
   $registration     = undef,
-  $core_libdir      = $mcollective::defaults::core_libdir,
-  $site_libdir      = $mcollective::defaults::site_libdir,
+  $core_libdir      = $mcollective_legacy::defaults::core_libdir,
+  $site_libdir      = $mcollective_legacy::defaults::site_libdir,
   $identity         = $fqdn,
 
   # networking
@@ -58,13 +58,13 @@ class mcollective (
   $server_config_file = undef, # default dependent on $confdir
   $server_logfile     = '/var/log/mcollective.log',
   $server_loglevel    = 'info',
-  $server_daemonize   = $mcollective::defaults::server_daemonize,
+  $server_daemonize   = $mcollective_legacy::defaults::server_daemonize,
   $service_name       = 'mcollective',
   $service_ensure     = 'running',
   $service_enable     = true,
   $server_package     = 'mcollective',
   $ruby_stomp_package = 'ruby-stomp',
-  $ruby_interpreter   = $mcollective::defaults::ruby_interpreter,
+  $ruby_interpreter   = $mcollective_legacy::defaults::ruby_interpreter,
 
   # client-specific
   $client_config_file  = undef, # default dependent on $confdir
@@ -76,7 +76,7 @@ class mcollective (
   $ssl_ca_cert          = undef,
   $ssl_server_public    = undef,
   $ssl_server_private   = undef,
-  $ssl_client_certs     = 'puppet:///modules/mcollective/empty',
+  $ssl_client_certs     = 'puppet:///modules/mcollective_legacy/empty',
   $ssl_client_certs_dir = undef, # default dependent on $confdir
 
   # ssl ciphers
@@ -93,7 +93,7 @@ class mcollective (
   $sshkey_server_private_key            = '/etc/ssh/ssh_host_rsa_key',
   $sshkey_server_authorized_keys        = undef,
   $sshkey_server_send_key               = undef,
-) inherits mcollective::defaults {
+) inherits mcollective_legacy::defaults {
 
   # Because the correct default value for several parameters is based on another
   # configurable parameter, it cannot be set in the parameter defaults above and
@@ -128,12 +128,12 @@ class mcollective (
   }
 
   if $client or $server {
-    contain ::mcollective::common
+    contain ::mcollective_legacy::common
   }
   if $client {
-    contain ::mcollective::client
+    contain ::mcollective_legacy::client
   }
   if $server {
-    contain ::mcollective::server
+    contain ::mcollective_legacy::server
   }
 }

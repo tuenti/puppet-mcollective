@@ -1,12 +1,12 @@
 #
-class mcollective::common::config (
+class mcollective_legacy::common::config (
   $purge_libdir = true,
 ) {
   if $caller_module_name != $module_name {
     fail("Use of private class ${name} by ${caller_module_name}")
   }
 
-  file { $mcollective::site_libdir:
+  file { $mcollective_legacy::site_libdir:
     ensure       => directory,
     owner        => 'root',
     group        => '0',
@@ -18,64 +18,64 @@ class mcollective::common::config (
     sourceselect => 'all',
   }
 
-  if $mcollective::server {
+  if $mcollective_legacy::server {
     # if we have a server install, reload when the plugins change
-    File[$mcollective::site_libdir] ~> Class['mcollective::server::service']
+    File[$mcollective_legacy::site_libdir] ~> Class['mcollective_legacy::server::service']
   }
 
-  datacat_collector { 'mcollective::site_libdir':
-    before          => File[$mcollective::site_libdir],
-    target_resource => File[$mcollective::site_libdir],
+  datacat_collector { 'mcollective_legacy::site_libdir':
+    before          => File[$mcollective_legacy::site_libdir],
+    target_resource => File[$mcollective_legacy::site_libdir],
     target_field    => 'source',
     source_key      => 'source_path',
   }
 
-  datacat_fragment { 'mcollective::site_libdir':
-    target => 'mcollective::site_libdir',
+  datacat_fragment { 'mcollective_legacy::site_libdir':
+    target => 'mcollective_legacy::site_libdir',
     data   => {
-      source_path => [ 'puppet:///modules/mcollective/site_libdir' ],
+      source_path => [ 'puppet:///modules/mcollective_legacy/site_libdir' ],
     },
   }
 
-  $libdir = $::mcollective::core_libdir ? {
-    undef   => $::mcollective::site_libdir,
-    ''      => $::mcollective::site_libdir,
-    default => "${::mcollective::site_libdir}:${::mcollective::core_libdir}"
+  $libdir = $::mcollective_legacy::core_libdir ? {
+    undef   => $::mcollective_legacy::site_libdir,
+    ''      => $::mcollective_legacy::site_libdir,
+    default => "${::mcollective_legacy::site_libdir}:${::mcollective_legacy::core_libdir}"
   }
 
-  mcollective::common::setting { 'libdir':
+  mcollective_legacy::common::setting { 'libdir':
     value => $libdir,
   }
 
-  mcollective::common::setting { 'connector':
-    value => $mcollective::connector,
+  mcollective_legacy::common::setting { 'connector':
+    value => $mcollective_legacy::connector,
   }
 
-  mcollective::common::setting { 'securityprovider':
-    value => $mcollective::securityprovider,
+  mcollective_legacy::common::setting { 'securityprovider':
+    value => $mcollective_legacy::securityprovider,
   }
 
-  mcollective::common::setting { 'collectives':
-    value => join(flatten([$mcollective::collectives]), ','),
+  mcollective_legacy::common::setting { 'collectives':
+    value => join(flatten([$mcollective_legacy::collectives]), ','),
   }
 
-  mcollective::common::setting { 'main_collective':
-    value => $mcollective::main_collective,
+  mcollective_legacy::common::setting { 'main_collective':
+    value => $mcollective_legacy::main_collective,
   }
 
-  mcollective::common::setting { 'identity':
-    value => $mcollective::identity,
+  mcollective_legacy::common::setting { 'identity':
+    value => $mcollective_legacy::identity,
   }
 
 
-  mcollective::soft_include { [
-    "::mcollective::common::config::connector::${mcollective::connector}",
-    "::mcollective::common::config::securityprovider::${mcollective::securityprovider}",
+  mcollective_legacy::soft_include { [
+    "::mcollective_legacy::common::config::connector::${mcollective_legacy::connector}",
+    "::mcollective_legacy::common::config::securityprovider::${mcollective_legacy::securityprovider}",
   ]:
-    start => Anchor['mcollective::common::config::begin'],
-    end   => Anchor['mcollective::common::config::end'],
+    start => Anchor['mcollective_legacy::common::config::begin'],
+    end   => Anchor['mcollective_legacy::common::config::end'],
   }
 
-  anchor { 'mcollective::common::config::begin': }
-  anchor { 'mcollective::common::config::end': }
+  anchor { 'mcollective_legacy::common::config::begin': }
+  anchor { 'mcollective_legacy::common::config::end': }
 }

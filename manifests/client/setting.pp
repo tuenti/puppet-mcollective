@@ -1,13 +1,13 @@
 # Define - mcollective::client::setting
-define mcollective::client::setting (
+define mcollective_legacy::client::setting (
   $value,
   $setting = $name,
   $order   = '30',
 ) {
-  mcollective::setting { "mcollective::client::setting ${title}":
+  mcollective_legacy::setting { "mcollective_legacy::client::setting ${title}":
     setting => $setting,
     value   => $value,
-    target  => [ 'mcollective::client', 'mcollective::user' ],
+    target  => [ 'mcollective_legacy::client', 'mcollective_legacy::user' ],
     order   => $order,
   }
 }

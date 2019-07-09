@@ -4,7 +4,7 @@
 # mcollective class.
 # Never refer to $mcollective::defaults::foo values outside of a parameter
 # list, it's leak and prevents users from actually having control.
-class mcollective::defaults {
+class mcollective_legacy::defaults {
   if versioncmp($::puppetversion, '4') < 0 {
     $confdir = '/etc/mcollective'
     $_core_libdir = $::osfamily ? {

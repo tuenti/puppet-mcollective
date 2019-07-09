@@ -1,14 +1,14 @@
 # private class
-class mcollective::server {
+class mcollective_legacy::server {
   if $caller_module_name != $module_name {
     fail("Use of private class ${name} by ${caller_module_name}")
   }
 
-  contain ::mcollective::server::install
-  contain ::mcollective::server::config
-  contain ::mcollective::server::service
+  contain ::mcollective_legacy::server::install
+  contain ::mcollective_legacy::server::config
+  contain ::mcollective_legacy::server::service
 
-  Class['mcollective::server::install']
-  -> Class['mcollective::server::config']
-  ~> Class['mcollective::server::service']
+  Class['mcollective_legacy::server::install']
+  -> Class['mcollective_legacy::server::config']
+  ~> Class['mcollective_legacy::server::service']
 }

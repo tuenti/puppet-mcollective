@@ -1,5 +1,5 @@
 # Define - mcollective::actionpolicy::rule
-define mcollective::actionpolicy::rule(
+define mcollective_legacy::actionpolicy::rule(
   String $agent,
   Enum['allow', 'deny'] $action = 'allow',
   String $callerid              = '*',
@@ -7,8 +7,8 @@ define mcollective::actionpolicy::rule(
   String $fact_filter           = '*',
   String $classes               = '*'
 ) {
-  datacat_fragment { "mcollective::actionpolicy::rule ${title}":
-    target => "mcollective::actionpolicy ${agent}",
+  datacat_fragment { "mcollective_legacy::actionpolicy::rule ${title}":
+    target => "mcollective_legacy::actionpolicy ${agent}",
     data   => {
       lines => [
         {

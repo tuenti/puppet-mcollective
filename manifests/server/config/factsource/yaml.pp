@@ -1,16 +1,16 @@
 # private class
-class mcollective::server::config::factsource::yaml (
+class mcollective_legacy::server::config::factsource::yaml (
   $path = $::path,
 ) {
   if $caller_module_name != $module_name {
     fail("Use of private class ${name} by ${caller_module_name}")
   }
 
-  $yaml_fact_path_real = $mcollective::yaml_fact_path_real
-  $ruby_shebang_path   = $mcollective::ruby_interpreter
-  $yaml_fact_cron      = $mcollective::yaml_fact_cron
+  $yaml_fact_path_real = $mcollective_legacy::yaml_fact_path_real
+  $ruby_shebang_path   = $mcollective_legacy::ruby_interpreter
+  $yaml_fact_cron      = $mcollective_legacy::yaml_fact_cron
 
-  if $mcollective::fact_cron_splay {
+  if $mcollective_legacy::fact_cron_splay {
     $cron_minute_offset  = fqdn_rand(15, $::macaddress)
     $cron_minutes        = [
                             $cron_minute_offset,
@@ -39,7 +39,7 @@ class mcollective::server::config::factsource::yaml (
         creates => $yaml_fact_path_real,
       }
     } else {
-      file { "${mcollective::site_libdir}/refresh-mcollective-metadata":
+      file { "${mcollective_legacy::site_libdir}/refresh-mcollective-metadata":
         owner   => '0',
         group   => '0',
         mode    => '0755',
@@ -52,25 +52,25 @@ class mcollective::server::config::factsource::yaml (
       # PATH as environment is global. Therefore, prefix the command itself in
       # the cron job with the value of the PATH environment variable to use.
       cron { 'refresh-mcollective-metadata':
-        command => "/bin/sh -c 'export PATH=${path}; ${mcollective::site_libdir}/refresh-mcollective-metadata >/dev/null 2>&1'",
+        command => "/bin/sh -c 'export PATH=${path}; ${mcollective_legacy::site_libdir}/refresh-mcollective-metadata >/dev/null 2>&1'",
         user    => 'root',
         minute  => $cron_minutes,
-        require => File["${mcollective::site_libdir}/refresh-mcollective-metadata"],
+        require => File["${mcollective_legacy::site_libdir}/refresh-mcollective-metadata"],
       }
 
       exec { 'create-mcollective-metadata':
         path    => "/opt/puppet/bin:${::path}",
-        command => "${mcollective::site_libdir}/refresh-mcollective-metadata",
+        command => "${mcollective_legacy::site_libdir}/refresh-mcollective-metadata",
         creates => $yaml_fact_path_real,
-        require => File["${mcollective::site_libdir}/refresh-mcollective-metadata"],
+        require => File["${mcollective_legacy::site_libdir}/refresh-mcollective-metadata"],
       }
     }
   }
 
-  mcollective::server::setting { 'factsource':
+  mcollective_legacy::server::setting { 'factsource':
     value => 'yaml',
   }
-  mcollective::server::setting { 'plugin.yaml':
+  mcollective_legacy::server::setting { 'plugin.yaml':
     value => $yaml_fact_path_real,
   }
 }

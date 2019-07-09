@@ -1,9 +1,9 @@
 # Define - mcollective::user::setting
-define mcollective::user::setting($username, $setting, $value, $order = '70') {
-  mcollective::setting { "mcollective::user::setting ${title}":
+define mcollective_legacy::user::setting($username, $setting, $value, $order = '70') {
+  mcollective_legacy::setting { "mcollective_legacy::user::setting ${title}":
     setting => $setting,
     value   => $value,
-    target  => "mcollective::user ${username}",
+    target  => "mcollective_legacy::user ${username}",
     order   => $order,
   }
 }

@@ -16,7 +16,7 @@
 # respective common, client, and server classes we can soft_include
 # mcollective::config::${role}::securityprovider::${mcollective::securityprovider}
 
-define mcollective::soft_include($start, $end) {
+define mcollective_legacy::soft_include($start, $end) {
   # does the class exist?
   if defined($name) {
     # declare it

@@ -1,12 +1,12 @@
 # private class
-class mcollective::common::install {
+class mcollective_legacy::common::install {
   if $caller_module_name != $module_name {
     fail("Use of private class ${name} by ${caller_module_name}")
   }
 
-  if $mcollective::manage_packages {
-    package { $mcollective::common_package:
-      ensure => $mcollective::version,
+  if $mcollective_legacy::manage_packages {
+    package { $mcollective_legacy::common_package:
+      ensure => $mcollective_legacy::version,
     }
   }
 }

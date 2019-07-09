@@ -1,8 +1,8 @@
 {
-  "name": "puppet-mcollective",
+  "name": "puppet-mcollective_legacy",
   "version": "3.0.0-rc0",
   "author": "Vox Pupuli",
-  "summary": "Installs, configures, and manages MCollective agents, clients, and middleware of an MCollective cluster.",
+  "summary": "Installs, configures, and manages MCollective (LEGACY) agents, clients, and middleware of an MCollective cluster.",
   "license": "Apache-2.0",
   "source": "https://github.com/voxpupuli/puppet-mcollective.git",
   "project_page": "https://github.com/voxpupuli/puppet-mcollective",
